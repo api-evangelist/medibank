@@ -1,0 +1,420 @@
+aid: medibank
+name: Medibank
+review:
+  question: Does Medibank expose a real, self-serve public API surface for developers?
+  answer: false
+  date: '2026-07-25'
+  reviewer: API Evangelist
+  homeMarket: Australia
+  tier: carrier-life-health
+findings:
+  summary: |
+    Medibank Private Limited is Australia's largest private health insurer,
+    listed on the ASX as MPL and operating the Medibank and ahm retail brands
+    plus the Amplar Health services arm. It publishes no developer portal and
+    no public API of any kind. Every conventional developer host and path was
+    probed on 2026-07-25 and none is a developer surface: developer,
+    developers, docs and apis subdomains of medibank.com.au return no DNS
+    answer at all; api.medibank.com.au resolves to 203.37.77.144 but does not
+    accept a public TCP connection on port 443 (curl times out after 20s, and
+    a raw port check reports the port closed or filtered); and
+    /developers, /api, /developer, /partners and /integrations all return
+    HTTP 404 on www.medibank.com.au. The site's own sitemap.xml (HTTP 200,
+    178,587 bytes, 1,364 <loc> entries) contains no developer, API, SDK or
+    integration page.
+
+    The only first-party integration surfaces are login walls and email-gated
+    onboarding. providers.medibank.com.au ("Medibank - Provider Self Service",
+    branded Provider Central / ESP on the public provider pages) returns
+    HTTP 200 but is a React single-page application with catch-all routing —
+    it serves the same 2,143-byte index.html shell for every path, including
+    /.well-known/openid-configuration, so a 200 there carries no information.
+    portal.medibank.com.au is a Palo Alto Networks GlobalProtect corporate VPN
+    (redirects to /global-protect/login.esp). partner.medibank.com.au resolves
+    to CloudFront but fails the TLS handshake for that SNI, so nothing is
+    served. eclipse.medibank.com.au and my.medibank.com.au resolve in DNS but
+    do not accept public connections on port 443 — private claiming and member
+    endpoints, not developer surfaces.
+
+    The real machine-to-machine claiming rails in this market are third-party
+    and government-operated rather than Medibank-published. ECLIPSE — the
+    Services Australia (Medicare Australia) in-patient online claiming system —
+    is the transport Medibank documents for hospital claims and for 25 percent
+    Fund Gap medical claims from Simplified Billing Agents under claim type
+    "MB", and it also serves the Online Eligibility Check (OEC) with
+    Presenting Illness (PIL) codes. ECFWeb and THELMA are named as alternative
+    eligibility-check channels for providers without ECLIPSE OEC access.
+    HICAPS and iSOFT terminals carry ancillary claiming. The MPPA billing
+    channel for pathology and diagnostic imaging is onboarded by phone and
+    email. Hospital Casemix Protocol (HCP) data is submitted through a Medibank
+    HCP Portal whose access is granted only by emailing hcp@medibank.com.au,
+    with the data specification itself published by the Australian Department
+    of Health and Aged Care, not by Medibank.
+
+    This is the expected posture for an Australian private health insurer.
+    APRA supervises prudentially, the Private Health Insurance Ombudsman
+    handles conduct, and the Consumer Data Right that opened Australian banking
+    and energy was designated to extend to general insurance and then deferred
+    and de-prioritised — and would not have reached private health insurance in
+    any case. There is no open-insurance obligation, no FHIR-style mandate on
+    the fund, and consequently no forcing function that would put a Medibank
+    API in front of an unauthenticated developer.
+  developerPortal:
+    verdict: none
+    classification: no developer portal exists
+    selfServe: false
+    gated: true
+    probes:
+    - url: https://developer.medibank.com.au
+      httpStatus: 000
+      dns: NXDOMAIN (no A record)
+      note: Host does not resolve.
+    - url: https://developers.medibank.com.au
+      httpStatus: 000
+      dns: NXDOMAIN (no A record)
+      note: Host does not resolve.
+    - url: https://docs.medibank.com.au
+      httpStatus: 000
+      dns: NXDOMAIN (no A record)
+      note: Host does not resolve.
+    - url: https://apis.medibank.com.au
+      httpStatus: 000
+      dns: NXDOMAIN (no A record)
+      note: Host does not resolve.
+    - url: https://api.medibank.com.au/
+      httpStatus: 000
+      dns: 203.37.77.144
+      note: |
+        Resolves but the TLS connection times out after 20 seconds and a raw
+        TCP check on port 443 reports closed or filtered. Not reachable from
+        the public internet, so nothing can be classified as an API surface.
+    - url: https://www.medibank.com.au/developers/
+      httpStatus: 404
+    - url: https://www.medibank.com.au/api/
+      httpStatus: 404
+    - url: https://www.medibank.com.au/developer/
+      httpStatus: 404
+    - url: https://www.medibank.com.au/partners/
+      httpStatus: 404
+    - url: https://www.medibank.com.au/integrations/
+      httpStatus: 404
+    - url: https://www.medibank.com.au/sitemap.xml
+      httpStatus: 200
+      note: |
+        1,364 URLs. Filtering for develop/api/integrat/partner/innovat/tech/
+        digital returns only unrelated marketing and sustainability pages. No
+        developer or API page exists in the site's own index.
+    gatedSurfaces:
+    - name: Medibank Provider Self Service (Provider Central / ESP)
+      url: https://providers.medibank.com.au/
+      httpStatus: 200
+      platform: React single-page application
+      classification: partner/provider login wall
+      selfServe: false
+      note: |
+        Title is "Medibank - Provider Self Service". The server returns the
+        same 2,143-byte index.html shell for every path — /.well-known/
+        openid-configuration, /static/js/main.54175f54.chunk.js and any
+        arbitrary route all return the shell with HTTP 200 — so no API
+        catalog, no OIDC discovery document and no JavaScript bundle can be
+        read anonymously. Linked from www.medibank.com.au/providers/ as
+        "Provider Central (ESP)". It is a healthcare-provider servicing
+        application for practitioners and hospitals, not a developer portal.
+    - name: Medibank corporate remote access
+      url: https://portal.medibank.com.au/
+      httpStatus: 404
+      finalURL: https://portal.medibank.com.au/global-protect/login.esp
+      classification: Palo Alto Networks GlobalProtect VPN login
+      note: Corporate remote-access gateway. Not a developer or partner API surface.
+    - name: partner.medibank.com.au
+      httpStatus: 000
+      dns: d3d2yftvyd4ze4.cloudfront.net (18.239.183.0/24)
+      classification: not serving
+      note: |
+        TCP 443 connects but the TLS handshake fails (sslv3 alert handshake
+        failure) — the CloudFront distribution has no certificate for this
+        SNI, so no content is published on this host.
+    - name: eclipse.medibank.com.au
+      httpStatus: 000
+      dns: 103.247.118.108
+      classification: private claiming endpoint
+      note: |
+        Resolves but port 443 is closed or filtered from the public internet.
+        Named after ECLIPSE, the Services Australia online claiming system.
+        Not publicly documented and not reachable.
+    - name: my.medibank.com.au
+      httpStatus: 000
+      dns: 203.41.198.109
+      classification: member endpoint, not publicly reachable
+    - name: HCP Portal (Hospital Casemix Protocol)
+      url: https://www.medibank.com.au/providers/hospital/
+      httpStatus: 200
+      classification: email-gated data submission portal
+      note: |
+        Quoted from the page: "To help with reporting obligations, we have an
+        HCP Portal that allows hospitals to submit HCP data securely to
+        Medibank. To get access to the HCP Portal, please email your request
+        to our HCP team at: hcp@medibank.com.au. For information about HCP
+        requirements and current specifications please visit the Department of
+        Health and Aged Care." The portal URL itself is not published and the
+        data specification is a government artifact, not a Medibank one.
+  acordPosture:
+    posture: no ACORD reference found
+    detail: |
+      No occurrence of ACORD, AL3, ACORD XML, NGDS or ACORD certification
+      appears anywhere on Medibank's public web estate — not on the corporate
+      site, not in the 1,364-URL sitemap, not on any provider or claiming
+      page, and not in the GitHub organization. This is the correct and
+      expected result rather than a gap in the review: ACORD's AL3 and ACORD
+      XML standards serve property and casualty and life carriers and their
+      agency management systems, and Australian private health insurance is
+      governed by an entirely different data regime. The transports Medibank
+      actually names are ECLIPSE (Services Australia), the Hospital Casemix
+      Protocol (Department of Health and Aged Care), the Medicare Benefits
+      Schedule item numbers and ECLIPSE Presenting Illness codes, and the
+      HICAPS and iSOFT terminal networks. ECLIPSE and HCP are the Australian
+      health-fund analogue of an ACORD posture, and neither is a Medibank
+      publication.
+  insuranceVerbs:
+    quote:
+      exposed: false
+      note: |
+        Quoting is a first-party web funnel only (Get a quote across health,
+        travel, pet, life and income protection). No public quote API, and no
+        documented aggregator or comparison API.
+    bind:
+      exposed: false
+      note: No public bind or purchase API. Policy purchase is web and call-centre only.
+    issue:
+      exposed: false
+      note: |
+        No public policy-issue or policy-administration API. Membership
+        servicing is done through the My Medibank member web app and app.
+    fnol:
+      exposed: false
+      audience: partner-only
+      note: |
+        Claims intake is real but entirely partner-gated and third-party
+        transported. Hospital claims and 25 percent Fund Gap medical claims
+        are lodged via ECLIPSE (claim type "MB" for Simplified Billing
+        Agents); ancillary claims go through HICAPS and iSOFT terminals;
+        pathology and diagnostic imaging goes through the MPPA billing
+        channel, onboarded by phone on 1300 130 460 and email to
+        MPPA@medibank.com.au. Member-side claiming is via the My Medibank app,
+        in store, or paper form. None of these is a documented Medibank API.
+  transports:
+  - protocol: REST
+    documented: false
+    note: No public REST API is documented on any Medibank host.
+  - protocol: GraphQL
+    documented: false
+    note: No /graphql surface was found or introspected.
+  - protocol: gRPC
+    documented: false
+    note: No published .proto or gRPC reference found.
+  - protocol: WebSocket
+    documented: false
+    note: No WebSocket endpoint documented.
+  - protocol: ECLIPSE (Services Australia online claiming)
+    documented: true
+    firstParty: false
+    note: |
+      Third-party, government-operated claiming transport that Medibank
+      participates in. Registration is with Services Australia (Medicare
+      Australia eBusiness Service Centre, 1800 700 199,
+      co.eclipse@medicareaustralia.gov.au), not with Medibank. Carries
+      hospital claims, 25 percent Fund Gap medical claims under claim type
+      "MB", and the Online Eligibility Check (OEC) with Presenting Illness
+      (PIL) codes. Rejection codes are generated by ECLIPSE and documented in
+      the ECLIPSE Online Hospital Claiming User Guide published by Services
+      Australia.
+  - protocol: ECFWeb
+    documented: true
+    firstParty: false
+    note: Named on the Medibank hospital provider page as an alternative eligibility-check channel for providers without ECLIPSE OEC access.
+  - protocol: THELMA
+    documented: true
+    firstParty: false
+    note: Named alongside ECFWeb as an alternative eligibility-check channel.
+  - protocol: HICAPS / iSOFT terminal claiming
+    documented: true
+    firstParty: false
+    note: Ancillary (extras) claiming runs through HICAPS and iSOFT practice terminals. Medibank maintains a "HICAPS and iSOFT updates" provider page.
+  - protocol: HCP file submission (Hospital Casemix Protocol)
+    documented: true
+    firstParty: partial
+    note: |
+      Medibank runs an HCP Portal for hospitals to submit Hospital Casemix
+      Protocol data. Access is granted by emailing hcp@medibank.com.au. The
+      specification is published by the Australian Department of Health and
+      Aged Care.
+  authModel:
+    public: false
+    schemes: []
+    note: |
+      No documented authentication scheme for any Medibank API, because no
+      public API exists. The provider and member applications are
+      session-based web login walls. No API key programme, no OAuth2 client
+      credentials or authorization code flow, no mTLS onboarding and no SAML
+      partner federation is documented publicly.
+    wellKnown:
+    - url: https://www.medibank.com.au/.well-known/openid-configuration
+      httpStatus: 301
+      note: Redirects into the marketing site; no OIDC discovery document served.
+    - url: https://www.medibank.com.au/.well-known/oauth-authorization-server
+      httpStatus: 301
+      note: Redirects into the marketing site; no authorization-server metadata served.
+    - url: https://providers.medibank.com.au/.well-known/openid-configuration
+      httpStatus: 200
+      note: |
+        Returns the React application's index.html shell, not JSON. A false
+        positive caused by SPA catch-all routing, not an OIDC document.
+    - url: https://members.medibank.com.au/.well-known/openid-configuration
+      httpStatus: 404
+    - url: https://www.medibank.com.au/security.txt
+      httpStatus: 404
+  webhooks:
+    published: false
+    note: No event catalog, no webhook documentation and no AsyncAPI definition was found.
+  postman:
+    published: false
+    note: No public Postman workspace or collection was found for Medibank.
+  openapi:
+    harvested: false
+    count: 0
+    note: |
+      No OpenAPI or Swagger document exists to harvest. There is no host that
+      serves one: the candidate spec paths could not even be probed
+      meaningfully because api.medibank.com.au refuses public connections and
+      no other API host resolves. The openapi/ directory is therefore omitted
+      from this repository.
+  sourceCode:
+    githubOrganization: https://github.com/Medibank
+    httpStatus: 200
+    publicRepos: 12
+    created: '2023-03-24'
+    note: |
+      The organization publishes only recruitment coding challenges
+      (coding-challenge-web, coding-challenge-android, coding-challenge-ios,
+      coding-challenge-api, coding-challenge-generic,
+      ventures-code-review-exercise-ios, ventures-code-review-exercise-android)
+      and forks or copies of Adobe Experience Manager OpenCloud tooling
+      (cloud-aem-platform-buildenv, cloud-aem-stack-manager-cloud,
+      cloud-puppet-aem-orchestrator, iOSKruxLibUniversal) plus a Storybook
+      fork. "coding-challenge-api" is a hiring exercise, not a product API. No
+      OpenAPI, AsyncAPI, SDK or client library is published.
+  brandsAndEntities:
+  - name: Medibank
+    url: https://www.medibank.com.au/
+    note: Primary private health insurance brand. Medibank Private Limited, ABN 47 080 890 259, ASX code MPL.
+  - name: ahm
+    url: https://ahm.com.au/
+    httpStatus: 200
+    note: |
+      Second retail health insurance brand. /developers and /api both return
+      HTTP 404; api.ahm.com.au and developer.ahm.com.au do not resolve. No
+      developer surface.
+  - name: Amplar Health
+    url: https://amplarhealth.com.au/
+    httpStatus: 403
+    note: |
+      Medibank's health services arm. medibankhealth.com.au redirects here.
+      The host returns HTTP 403 to an anonymous scripted request; no developer
+      surface is advertised.
+  linesOfBusiness:
+  - Private health insurance (hospital, extras, ambulance)
+  - Overseas Student Health Cover (OSHC) and Overseas Visitors Health Cover
+  - Travel insurance (distributed)
+  - Pet insurance (distributed)
+  - Life insurance and income protection (distributed)
+  - Recover Boost accident and critical illness cover
+  - Health services delivery via Amplar Health
+sources:
+- url: https://www.medibank.com.au/
+  type: Website
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: Corporate and retail site. Navigation enumerates the full line-of-business set. No developer or API entry anywhere.
+- url: https://www.medibank.com.au/robots.txt
+  type: Robots
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: |
+    Reveals a Kentico-era CMS path set and one disallowed backend-for-frontend
+    path, /health-insurance/members/bff/, which returns HTTP 404 at its root
+    and is not a documented API. Declares Sitemap https://www.medibank.com.au/sitemap.xml.
+- url: https://www.medibank.com.au/sitemap.xml
+  type: Sitemap
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: 1,364 URLs, none developer or API related.
+- url: https://www.medibank.com.au/providers/
+  type: Documentation
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: Provider hub. Links "Provider Central (ESP)" — the providers.medibank.com.au login wall.
+- url: https://www.medibank.com.au/providers/hospital/
+  type: Documentation
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: |
+    Source for the ECLIPSE Online Eligibility Check (OEC), Presenting Illness
+    (PIL) codes, the ECFWeb and THELMA alternative channels, the HCP Portal
+    and the hcp@medibank.com.au access request. /providers/hospital-casemix-protocol/
+    redirects here.
+- url: https://www.medibank.com.au/providers/medical/mppa/
+  type: Documentation
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: |
+    MPPA billing channel for pathology and diagnostic imaging. States "ECLIPSE
+    is the in-patient claiming system developed by Medicare Australia. It
+    enables providers, health insurers and Medicare to exchange and pay claims
+    electronically." /providers/mppa-billing-channel/ redirects here.
+- url: https://www.medibank.com.au/providers/information-for-simplified-billing-agents/
+  type: Documentation
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: |
+    States "Medibank now has the capability to accept 25% Fund Gap Medical
+    claims via ECLIPSE for Simplified Billing Agents under claim type 'MB'"
+    and that ECLIPSE "offers a secure connection between practices, public and
+    private hospitals, billing agents, Medicare and Department of Veterans'
+    Affairs and health funds."
+- url: https://www.medibank.com.au/providers/claims/hospital-claim/
+  type: Documentation
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: "Submitting claims via ECLIPSE. Hospital claims can be submitted via ECLIPSE."
+- url: https://www.medibank.com.au/providers/hicaps-and-isoft-updates/
+  type: Documentation
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: Resolves to the generic provider help page; the HICAPS and iSOFT update content is not exposed to anonymous visitors.
+- url: https://providers.medibank.com.au/
+  type: Portal
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: React SPA login wall, catch-all routing, no anonymous API catalog.
+- url: https://github.com/Medibank
+  type: GitHubOrganization
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: 12 public repositories, all recruitment exercises or AEM tooling forks. No API artifacts.
+- url: https://ahm.com.au/
+  type: Website
+  httpStatus: 200
+  fetched: '2026-07-25'
+  note: Second brand. No developer surface.
+actions:
+  openapiHarvested: 0
+  apisListed: 0
+  apisYmlCreated: true
+  reason: |
+    Medibank publishes no public, self-serve API and no developer portal, so
+    apis[] is intentionally empty. Recording that absence accurately — together
+    with the ECLIPSE, HCP, HICAPS and iSOFT rails that actually carry the
+    company's machine-to-machine claiming traffic, and the confirmed absence of
+    any ACORD reference — is the correct outcome for an Australian private
+    health insurer in a market where the Consumer Data Right never reached
+    insurance.
