@@ -60,6 +60,8 @@ modified: '2026-07-25'
 specificationVersion: '0.19'
 apis: []
 common:
+- type: DomainSecurity
+  url: security/medibank-domain-security.yml
 - type: Website
   url: https://www.medibank.com.au/
 - type: Blog
@@ -80,6 +82,21 @@ common:
   url: https://www.medibank.com.au/providers/information-for-simplified-billing-agents/
 - type: Portal
   url: https://providers.medibank.com.au/
+- type: Support
+  url: https://www.medibank.com.au/help/
+- type: Login
+  url: https://members.medibank.com.au/
+- type: SignUp
+  url: https://www.medibank.com.au/health-insurance/join/
+- type: WellKnown
+  name: Well-known discovery surface (probed)
+  url: well-known/medibank-well-known.yml
+- type: Conformance
+  name: Standards and regulatory conformance
+  url: conformance/medibank-conformance.yml
+- type: LLMsTxt
+  name: llms.txt
+  url: llms/medibank-llms.txt
 - type: PrivacyPolicy
   url: https://www.medibank.com.au/privacy/
 - type: TermsOfService

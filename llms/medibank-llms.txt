@@ -1,0 +1,65 @@
+# Medibank
+
+> Medibank Private Limited (ASX: MPL) is Australia's largest private health insurer, headquartered in Melbourne and operating the Medibank and ahm retail brands alongside the Amplar Health services arm. It publishes **no public API and no developer portal**. Every conventional developer host and path was probed on 2026-07-25 and none is a developer surface. The machine-to-machine claiming rails Medibank actually participates in — ECLIPSE, the Hospital Casemix Protocol, HICAPS and iSOFT — are operated by Services Australia, the Department of Health and Aged Care, and third-party terminal networks, not published by Medibank. This file records that posture so an agent does not waste calls hunting for a contract that does not exist.
+
+## API posture
+
+- API availability: none public. `apis: []` in apis.yml is intentional and verified, not a harvesting gap.
+- Machine-readable contract: none. No OpenAPI, Swagger, AsyncAPI, GraphQL SDL, .proto, JSON Schema, or Postman collection exists on any Medibank host.
+- Authentication: no documented scheme, because there is no public API. Member and provider applications are session-based web login walls.
+- Events and webhooks: none published.
+- Sandbox, CLI, SDKs, MCP server: none. There is nothing to ground them in.
+- Hosts checked and rejected: developer / developers / docs / apis .medibank.com.au (NXDOMAIN); api.medibank.com.au (resolves to 203.37.77.144, port 443 closed or filtered); eclipse.medibank.com.au and my.medibank.com.au (resolve, refuse public connections); partner.medibank.com.au (CloudFront, TLS handshake fails for the SNI); www.medibank.com.au/developers, /api, /developer, /partners, /integrations (all HTTP 404).
+
+## Gated integration surfaces
+
+- [Provider Central (ESP) — Provider Self Service](https://providers.medibank.com.au/): React single-page application login wall. Catch-all routing returns the same 2,143-byte index.html shell for every path, so a 200 on this host carries no information.
+- [HCP Portal](https://www.medibank.com.au/providers/hospital/): Hospital Casemix Protocol submission portal. Access granted only by emailing hcp@medibank.com.au. The portal URL itself is not published.
+- [MPPA billing channel](https://www.medibank.com.au/providers/medical/mppa/): pathology and diagnostic imaging billing, onboarded by phone and email.
+- portal.medibank.com.au: Palo Alto GlobalProtect corporate VPN, not an integration surface.
+
+## Third-party claiming rails
+
+- **ECLIPSE** (Services Australia in-patient online claiming): hospital claims and 25 percent Fund Gap medical claims from Simplified Billing Agents under claim type "MB"; also serves the Online Eligibility Check (OEC) with Presenting Illness (PIL) codes. Registration is with Services Australia, not Medibank.
+- **ECFWeb** and **THELMA**: alternative eligibility-check channels for providers without ECLIPSE OEC access.
+- **HICAPS** and **iSOFT** terminals: ancillary (extras) claiming.
+- **Hospital Casemix Protocol (HCP)**: specification published by the Australian Department of Health and Aged Care; Medibank runs the submission portal.
+- **Medicare Benefits Schedule (MBS)**: the item-number vocabulary claims are coded against.
+
+## Regulatory context
+
+- Prudential supervision: APRA. Conduct: Private Health Insurance Ombudsman. Privacy: Privacy Act 1988 (Cth), OAIC complaints channel.
+- The Consumer Data Right that opened Australian banking and energy was designated to extend to general insurance and then deferred and de-prioritised — and would not have reached private health insurance in any case. There is no open-insurance obligation and no CDR seam reaching a health fund.
+- No ACORD reference of any kind appears on the public estate. ACORD AL3 and ACORD XML serve property, casualty and life carriers; Australian private health insurance runs on ECLIPSE, HCP and the MBS instead.
+- No FHIR mandate applies to an Australian private health insurer, and no FHIR endpoint or capability statement exists.
+
+## Provider documentation
+
+- [Provider hub](https://www.medibank.com.au/providers/)
+- [Provider claims](https://www.medibank.com.au/providers/claims/)
+- [Hospital providers — ECLIPSE OEC, PIL codes, ECFWeb, THELMA, HCP Portal](https://www.medibank.com.au/providers/hospital/)
+- [MPPA billing channel](https://www.medibank.com.au/providers/medical/mppa/)
+- [Information for Simplified Billing Agents — claim type "MB"](https://www.medibank.com.au/providers/information-for-simplified-billing-agents/)
+
+## Company
+
+- [Website](https://www.medibank.com.au/)
+- [About Medibank](https://www.medibank.com.au/about/)
+- [Investor centre (ASX: MPL)](https://www.medibank.com.au/about/investor-centre/)
+- [Newsroom](https://www.medibank.com.au/livebetter/newsroom/)
+- [Help and support](https://www.medibank.com.au/help/)
+- [Security and privacy](https://www.medibank.com.au/help/security-and-privacy/)
+- [Privacy policy](https://www.medibank.com.au/privacy/)
+- [Legal information](https://www.medibank.com.au/legal-information/)
+- [Join](https://www.medibank.com.au/health-insurance/join/)
+- [My Medibank member login](https://members.medibank.com.au/)
+- [GitHub organization](https://github.com/Medibank) — 12 public repositories, all recruitment coding exercises or Adobe Experience Manager tooling forks. No API artifacts.
+- [ahm](https://ahm.com.au/) — second retail brand, no developer surface.
+- [Amplar Health](https://amplarhealth.com.au/) — health services arm.
+
+## Artifacts in this repository
+
+- [Well-known index](well-known/medibank-well-known.yml) — every /.well-known/ path probed, with status. The only documents that exist are Android App Links and Apple Universal Links for the My Medibank, Work Better and ahm apps; the members.medibank.com.au association file enumerates 64 member deep-link paths and is the richest anonymous route catalog Medibank publishes.
+- [Conformance](conformance/medibank-conformance.yml) — standards posture: ECLIPSE, HCP, MBS and HICAPS conform; ACORD, FHIR, CDR, OAuth, OpenAPI and coordinated vulnerability disclosure do not.
+- [Domain security](security/medibank-domain-security.yml) — probed TLS 1.3, HSTS, CAA, SPF and DMARC (p=reject); DNSSEC is not signed.
+- [Review](review.yml) — the full 2026-07-25 developer-surface review, host by host.

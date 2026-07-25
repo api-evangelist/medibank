@@ -1,0 +1,216 @@
+generated: '2026-07-25'
+method: derived
+source: review.yml + live probes of the Medibank public estate on 2026-07-25
+note: >-
+  Medibank publishes no machine-readable API contract, so nothing here is
+  derived from an OpenAPI document. Every entry is grounded either in a
+  Medibank-published page (the provider and privacy pages), in a live probe
+  recorded in security/medibank-domain-security.yml and
+  well-known/medibank-well-known.yml, or in the documented absence recorded in
+  review.yml. Australian private health insurance conforms to a government
+  data regime — ECLIPSE, the Hospital Casemix Protocol and the Medicare
+  Benefits Schedule — rather than to the API and insurance-data standards that
+  a property-and-casualty or open-banking carrier would carry. An entry with
+  conforms:false is an accurately recorded absence, not an unverified gap.
+standards:
+
+# --- API contract and description standards -------------------------------
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document exists on any Medibank host. api,
+    developer, developers, docs and apis subdomains of medibank.com.au either
+    do not resolve or refuse public connections; /openapi.json and
+    /swagger.json on members.medibank.com.au redirect to /errors/404.html;
+    providers.medibank.com.au returns its SPA shell for every path.
+- id: asyncapi
+  conforms: false
+  evidence: No event catalog, webhook documentation or AsyncAPI document was found.
+- id: graphql
+  conforms: false
+  evidence: No /graphql surface was found on any reachable host.
+- id: grpc
+  conforms: false
+  evidence: No published .proto definition and no gRPC reference.
+- id: json-schema
+  conforms: false
+  evidence: No published schemas.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: No public API responses to inspect.
+
+# --- Discovery and well-known standards -----------------------------------
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    /.well-known/security.txt redirects to the AEM origin on
+    www.medibank.com.au, 404s on members.medibank.com.au and 403s on
+    ahm.com.au. No RFC 9116 document is served.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog serves no document on any host.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  evidence: No authorization-server metadata document on any reachable host.
+- id: openid-connect-discovery
+  conforms: false
+  evidence: >-
+    /.well-known/openid-configuration returns a 301 to the AEM origin on
+    www, 404 on members.medibank.com.au, and the SPA shell (a false positive)
+    on providers.medibank.com.au.
+- id: android-app-links
+  conforms: true
+  evidence: >-
+    Digital Asset Links published at /.well-known/assetlinks.json on
+    www.medibank.com.au (au.com.medibank.workbetter),
+    members.medibank.com.au (au.com.medibank.phs) and ahm.com.au
+    (au.com.ahm.ahmapp). Harvested to well-known/.
+- id: apple-universal-links
+  conforms: true
+  evidence: >-
+    Apple App Site Association published on all three hosts; the
+    members.medibank.com.au document enumerates 64 member deep-link paths.
+    Harvested to well-known/.
+
+# --- Authentication and authorization -------------------------------------
+- id: oauth2
+  conforms: false
+  evidence: >-
+    No public OAuth 2.0 authorization server, no documented client
+    registration, no scopes. Member and provider applications are
+    session-based web login walls.
+- id: openid-connect
+  conforms: false
+  evidence: No OIDC provider is exposed publicly.
+- id: mtls
+  conforms: false
+  evidence: No documented mutual-TLS partner onboarding.
+- id: saml
+  conforms: false
+  evidence: No public SAML federation metadata.
+
+# --- Transport security (probed) ------------------------------------------
+- id: tls-1.3
+  conforms: true
+  evidence: >-
+    www.medibank.com.au and providers.medibank.com.au both negotiate TLSv1.3.
+    See security/medibank-domain-security.yml.
+- id: rfc6797-hsts
+  conforms: true
+  evidence: >-
+    HSTS present on www.medibank.com.au (max-age 63072000),
+    providers.medibank.com.au (max-age 31536000) and
+    members.medibank.com.au (max-age 63072000, includeSubDomains).
+- id: dnssec
+  conforms: false
+  evidence: medibank.com.au is not DNSSEC signed.
+- id: rfc8659-caa
+  conforms: true
+  evidence: >-
+    CAA records restrict issuance to digicert.com, entrust.net and pki.goog,
+    with iodef mailto:mpl_secops_alerts@medibank.com.au.
+- id: spf
+  conforms: true
+  evidence: SPF record published for medibank.com.au.
+- id: dmarc
+  conforms: true
+  evidence: DMARC published with policy p=reject.
+
+# --- Insurance and health data standards ----------------------------------
+- id: acord-al3
+  conforms: false
+  evidence: >-
+    No ACORD, AL3, ACORD XML or NGDS reference appears anywhere on the
+    Medibank public estate, including the 1,364-URL sitemap. Expected — ACORD
+    serves property, casualty and life carriers, not Australian private
+    health insurance.
+- id: acord-xml
+  conforms: false
+  evidence: Same as acord-al3; no ACORD publication of any kind.
+- id: fhir-r4
+  conforms: false
+  evidence: >-
+    No FHIR endpoint, capability statement or AU Core reference. Australian
+    private health insurers carry no FHIR mandate; the payer-side interop
+    obligations that force FHIR on US payers have no Australian analogue.
+- id: hl7-v2
+  conforms: false
+  evidence: No HL7 v2 interface documented publicly.
+- id: cdr-australia
+  conforms: false
+  evidence: >-
+    The Consumer Data Right was designated to extend to general insurance and
+    then deferred and de-prioritised, and would not have reached private
+    health insurance in any case. No CDR register participation, no
+    /cds-au/v1 surface, no product reference data endpoint.
+- id: eclipse-online-claiming
+  conforms: true
+  first_party: false
+  evidence: >-
+    Medibank documents ECLIPSE, the Services Australia in-patient online
+    claiming system, as the transport for hospital claims and for 25 percent
+    Fund Gap medical claims from Simplified Billing Agents under claim type
+    "MB", and for the Online Eligibility Check with Presenting Illness codes.
+    Registration is with Services Australia, not Medibank. Sources:
+    /providers/claims/hospital-claim/ and
+    /providers/information-for-simplified-billing-agents/.
+- id: hospital-casemix-protocol
+  conforms: true
+  first_party: partial
+  evidence: >-
+    Medibank operates an HCP Portal for hospitals to submit Hospital Casemix
+    Protocol data, with access granted by emailing hcp@medibank.com.au. The
+    HCP specification itself is published by the Australian Department of
+    Health and Aged Care. Source: /providers/hospital/.
+- id: medicare-benefits-schedule
+  conforms: true
+  first_party: false
+  evidence: >-
+    MBS item numbers and ECLIPSE Presenting Illness codes are the claim
+    vocabulary Medibank's provider pages instruct against.
+- id: hicaps-isoft-terminal-claiming
+  conforms: true
+  first_party: false
+  evidence: >-
+    Ancillary (extras) claiming runs through HICAPS and iSOFT practice
+    terminals; Medibank maintains a HICAPS and iSOFT updates provider page.
+
+# --- Regulatory posture ---------------------------------------------------
+- id: privacy-act-1988-au
+  conforms: true
+  evidence: >-
+    The Medibank privacy policy at https://www.medibank.com.au/privacy/
+    states members are "entitled under the Privacy Act 1988 (Cth) to make a
+    complaint to the Office of the Australian Information Commissioner".
+- id: apra-prudential-supervision
+  conforms: true
+  evidence: >-
+    Medibank Private Limited is a registered private health insurer
+    prudentially supervised by APRA; it reports as ASX-listed MPL through
+    https://www.medibank.com.au/about/investor-centre/.
+- id: private-health-insurance-ombudsman
+  conforms: true
+  evidence: >-
+    Conduct oversight for Australian private health insurance sits with the
+    Private Health Insurance Ombudsman, the market-wide regime Medibank
+    operates under.
+- id: soc2
+  conforms: false
+  evidence: >-
+    No SOC 2 claim is published. No trust centre exists —
+    trust.medibank.com.au and security.medibank.com.au do not resolve.
+- id: iso-27001
+  conforms: false
+  evidence: >-
+    No ISO 27001 certification claim appears on the privacy page, the
+    security and privacy help page, or elsewhere on the public estate.
+- id: coordinated-vulnerability-disclosure
+  conforms: false
+  evidence: >-
+    No responsible-disclosure or vulnerability-disclosure page
+    (/responsible-disclosure/, /vulnerability-disclosure/, /security/ all
+    404), no security.txt, and no HackerOne or Bugcrowd programme (both
+    return 404 for medibank). The security and privacy help page directs
+    consumers to Scamwatch and ReportCyber rather than offering a researcher
+    channel. The only researcher-adjacent contact published anywhere is the
+    CAA iodef address mpl_secops_alerts@medibank.com.au.

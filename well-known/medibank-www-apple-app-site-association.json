@@ -1,0 +1,94 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appIDs": [
+                    "43A9YN39X2.au.com.medibank.workbetter",
+                    "Q2SQ7R5ZP3.au.com.medibank.workbetter.stage",
+                    "Q2SQ7R5ZP3.au.com.medibank.workbetter.uat",
+                    "Q2SQ7R5ZP3.com.medibank.valencia.stage",
+                    "43A9YN39X2.au.com.medibank.workbetter.internal.beta",
+                    "Q2SQ7R5ZP3.com.medibank.valencia.uat"
+                ],
+                "components": [
+                    {
+                        "/": "/member/wearables/wearables-cloud-redirect/*",
+                        "comment": "Work Better - Universal link to Add Wearables (Completion)."
+                    },
+                    {
+                        "/": "/member/health-programs/*",
+                        "comment": "Work Better - Universal link to Team Challenges."
+                    },
+                    {
+                        "/": "/member/health-programs",
+                        "comment": "Work Better - Universal link to Health Programs."
+                    },
+                    {
+                        "/": "/member/health-journey/*",
+                        "comment": "Work Better - Universal link to Activity."
+                    },
+                    {
+                        "/": "/member/health-journey",
+                        "comment": "Work Better - Universal link to Health Journey."
+                    },
+                    {
+                        "/": "/member/health-history",
+                        "comment": "Work Better - Universal link to Health History."
+                    },
+                    {
+                        "/": "/member/health-progress",
+                        "comment": "Work Better - Universal link to Health Progress."
+                    },
+                    {
+                        "/": "/member/about-me",
+                        "?": {
+                            "view": "metrics"
+                        },
+                        "comment": "Work Better - Universal link to About Me (Metrics)."
+                    },
+                    {
+                        "/": "/member/about-me",
+                        "comment": "Work Better - Universal link to About Me."
+                    },
+                    {
+                        "/": "/member/get-care",
+                        "comment": "Work Better - Universal link to Health Hub."
+                    },
+                    {
+                        "/": "/get-care",
+                        "comment": "Work Better - Universal link to Health Hub."
+                    },
+                    {
+                        "/": "/member/get-care/*",
+                        "comment": "Work Better - Universal link to Health Hub."
+                    },
+                    {
+                        "/": "/get-care/*",
+                        "comment": "Work Better - Universal link to Health Hub."
+                    },
+                    {
+                        "/": "/member/appointment-list",
+                        "comment": "Work Better - Universal link to Health Hub."
+                    },
+                    {
+                        "/": "/appointment-list",
+                        "comment": "Work Better - Universal link to Health Hub."
+                    },
+                    {
+                        "/": "/member/achievements",
+                        "comment": "Work Better - Universal link to Acheivements."
+                    },
+                    {
+                        "/": "/member/wellness-check",
+                        "comment": "Work Better - Universal link to Wellness Check."
+                    },
+                    {
+                        "/": "/achievements",
+                        "comment": "Work Better - Universal link to Acheivements."
+                    }
+                ]
+            }
+        ]
+    }
+}

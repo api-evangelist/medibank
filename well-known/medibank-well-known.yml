@@ -1,0 +1,141 @@
+generated: '2026-07-25'
+method: searched
+source: live probes of the /.well-known/ surface on every reachable Medibank host
+note: >-
+  Medibank publishes no API-oriented discovery documents. There is no
+  api-catalog, no OpenID Connect discovery document, no OAuth authorization
+  server metadata, no ai-plugin.json and no RFC 9116 security.txt anywhere on
+  the public estate. What the /.well-known/ surface does carry is real and was
+  harvested verbatim: Android App Links (assetlinks.json) and Apple Universal
+  Links (apple-app-site-association) for the My Medibank member app, the
+  Medibank Work Better corporate wellbeing app, and the ahm app. Those files
+  are the only machine-readable route catalogs Medibank publishes anonymously
+  — they enumerate member deep-link paths, not API operations.
+api_catalog_found: false
+openid_configuration_found: false
+oauth_metadata_found: false
+security_txt_found: false
+hosts:
+- host: https://www.medibank.com.au
+  documents:
+  - path: /.well-known/assetlinks.json
+    status: 200
+    content_type: application/json
+    file: medibank-www-assetlinks.json
+    kind: android-app-links
+    note: >-
+      Digital Asset Links for the Medibank Work Better Android app
+      (au.com.medibank.workbetter, plus .uat and .stage build variants).
+  - path: /.well-known/apple-app-site-association
+    status: 200
+    content_type: application/octet-stream
+    file: medibank-www-apple-app-site-association.json
+    kind: apple-universal-links
+    note: >-
+      Apple App Site Association for the Work Better iOS app (team 43A9YN39X2
+      and Q2SQ7R5ZP3, bundle au.com.medibank.workbetter and the
+      com.medibank.valencia stage/uat variants). 18 path components covering
+      /member/health-programs, /member/health-journey, /member/get-care,
+      /member/wearables and /member/wellness-check.
+  - path: /.well-known/security.txt
+    status: 301
+    redirect: https://retail-live.aem.ha-medibank.com/.well-known/security.txt/
+    note: >-
+      Soft redirect into the Adobe Experience Manager origin. No RFC 9116
+      document is served. https://www.medibank.com.au/security.txt returns 404.
+  - path: /.well-known/openid-configuration
+    status: 301
+    note: Redirects to the AEM origin; no OIDC discovery document.
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+    note: Redirects to the AEM origin; no RFC 8414 metadata.
+  - path: /.well-known/api-catalog
+    status: 301
+    note: Redirects to the AEM origin; no RFC 9727 API catalog.
+  - path: /.well-known/ai-plugin.json
+    status: 301
+    note: Redirects to the AEM origin; no plugin manifest.
+- host: https://members.medibank.com.au
+  note: >-
+    The My Medibank member login application, reached from
+    https://www.medibank.com.au/login/. Apache on Amazon Linux behind
+    CloudFront; HSTS max-age 63072000 with includeSubDomains.
+  documents:
+  - path: /.well-known/assetlinks.json
+    status: 200
+    content_type: application/json
+    file: medibank-members-assetlinks.json
+    kind: android-app-links
+    note: >-
+      Digital Asset Links for the My Medibank Android app
+      (au.com.medibank.phs, plus .alpha and .beta build variants).
+  - path: /.well-known/apple-app-site-association
+    status: 200
+    content_type: application/json
+    file: medibank-members-apple-app-site-association.json
+    kind: apple-universal-links
+    note: >-
+      Apple App Site Association for the My Medibank iOS app
+      (43A9YN39X2.au.com.medibank.ios and its internal beta). 64 deep-link
+      paths each, covering account activation, claims, payments, cover,
+      Live Better rewards, find-care and digital membership cards. This is
+      the richest anonymous route catalog Medibank publishes, and it is a
+      mobile deep-link map rather than an API surface.
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /openapi.json
+    status: 301
+    redirect: https://members.medibank.com.au/errors/404.html
+    note: Probed as part of contract discovery; the host has no OpenAPI.
+  - path: /swagger.json
+    status: 301
+    redirect: https://members.medibank.com.au/errors/404.html
+- host: https://ahm.com.au
+  note: Medibank's second retail health insurance brand.
+  documents:
+  - path: /.well-known/assetlinks.json
+    status: 200
+    content_type: application/json
+    file: medibank-ahm-assetlinks.json
+    kind: android-app-links
+    note: Digital Asset Links for the ahm Android app (au.com.ahm.ahmapp).
+  - path: /.well-known/apple-app-site-association
+    status: 200
+    content_type: application/json
+    file: medibank-ahm-apple-app-site-association.json
+    kind: apple-universal-links
+    note: >-
+      Apple App Site Association for 43A9YN39X2.au.com.ahm.ahmapp. Only two
+      components, /contact-us and /msg.
+  - path: /.well-known/security.txt
+    status: 403
+    note: The ahm edge returns 403 to anonymous scripted requests for this path.
+- host: https://providers.medibank.com.au
+  note: >-
+    Provider Self Service (Provider Central / ESP). A React single-page
+    application with catch-all routing — every path, including
+    /.well-known/*, returns the same 2,143-byte index.html shell with HTTP
+    200, so a 200 on this host carries no information. Recorded here so the
+    false positive is not mistaken for a discovery document.
+  documents:
+  - path: /.well-known/assetlinks.json
+    status: 200
+    content_type: text/html
+    spa_shell: true
+    note: SPA shell, not a discovery document. Not harvested.
+  - path: /.well-known/apple-app-site-association
+    status: 200
+    content_type: text/html
+    spa_shell: true
+    note: SPA shell, not a discovery document. Not harvested.
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: text/html
+    spa_shell: true
+    note: SPA shell, not an OIDC document. Not harvested.
