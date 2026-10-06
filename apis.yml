@@ -79,10 +79,12 @@ tags:
 - Pet Insurance
 - Partner Gated
 created: '2026-07-25'
-modified: '2026-07-25'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis: []
 common:
+- url: https://www.medibank.com.au/livebetter/newsroom/rss
+  type: BlogRSS
 - type: DomainSecurity
   url: security/medibank-domain-security.yml
 - type: Website
