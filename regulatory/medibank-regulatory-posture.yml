@@ -1,0 +1,51 @@
+generated: '2026-10-20'
+method: searched
+source: https://www.medibank.com.au/privacy/
+signals:
+  data_subject_request:
+    url: https://www.medibank.com.au/privacy/
+    section: 'Section 7: How you can access your personal information'
+    stated_sla: 'usually within 30 days of receipt of your request'
+    rights_named: [access, correction]
+    escalation: Office of the Australian Information Commissioner (Privacy Act 1988 (Cth))
+    evidence:
+    - source: https://www.medibank.com.au/privacy/
+      http_status: 200
+      fetched: '2026-10-20'
+      quote: 'You can ask us for access to the information we hold about you at any time.'
+    - source: https://www.medibank.com.au/privacy/
+      http_status: 200
+      fetched: '2026-10-20'
+      quote: 'We will endeavour to respond in a reasonable time, usually within 30 days of receipt of your request. We may charge a reasonable fee for providing your personal information.'
+    - source: https://www.medibank.com.au/privacy/
+      http_status: 200
+      fetched: '2026-10-20'
+      quote: 'If we have not responded to you within a reasonable time or if your complaint is not resolved to your satisfaction, you are entitled under the Privacy Act 1988 (Cth) to make a complaint to the Office of the Australian Information Commissioner.'
+    note: >-
+      Access (Section 7) and correction (Section 8) rights under the Australian Privacy Act, with identity
+      verification, a ~30-day target, a possible reasonable fee, and OAIC escalation. No deletion or
+      portability right is named on the page.
+  data_residency:
+    url: https://www.medibank.com.au/privacy/
+    section: 'Section 9: Disclosure overseas'
+    regions_named: [Canada, European Union, Fiji, India, Indonesia, Japan, Mauritius, New Zealand, Philippines, Singapore, South Africa, United Kingdom, United States, Vietnam]
+    evidence:
+    - source: https://www.medibank.com.au/privacy/
+      http_status: 200
+      fetched: '2026-10-20'
+      quote: 'We may disclose your personal information to recipients located outside of Australia as part of our ordinary business, functions and activities. These overseas recipients include our service providers or their related entities and their sub-contractors, which provide support and assistance to us in delivering our products and services to you.'
+    note: >-
+      Not an in-Australia residency commitment: the policy states personal information may go offshore and
+      lists the countries where overseas recipients are likely to be located.
+  subprocessors:
+    url: https://www.medibank.com.au/legal-information/
+    section: 'Medibank Message Us terms of use'
+    named: [LivePerson Netherlands B.V]
+    evidence:
+    - source: https://www.medibank.com.au/legal-information/
+      http_status: 200
+      fetched: '2026-10-20'
+      quote: 'In order to perform these functions, we may disclose your Information to third parties in Australia and overseas, including LivePerson Netherlands B.V who has been engaged by Medibank to facilitate the Message Us function.'
+    note: >-
+      Names one processor, for the Message Us chat feature only. No full subprocessor list was found on
+      these pages; the privacy policy describes overseas service providers by country, not by name.

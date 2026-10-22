@@ -1,0 +1,17 @@
+generated: '2026-10-20'
+method: none
+name: Medibank pricing
+audience: consumer
+pricing_basis: none
+published: false
+plan_count: 0
+delivery:
+  model: unclear
+note: >-
+  Medibank publishes no API or developer pricing: it has no public API and no
+  developer portal (see apis.yml description). Its only published prices are
+  retail health, travel and pet insurance premiums on www.medibank.com.au,
+  which are consumer insurance products, not API pricing, and are not recorded
+  here. The pre-flight topic pages labelled pricing_plans (travel FAQ, MPPA
+  billing channel, simplified billing agents) carry no API price.
+plans: []

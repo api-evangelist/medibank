@@ -1,0 +1,24 @@
+generated: '2026-10-20'
+method: none
+source:
+- https://zapier.com/apps/medibank/integrations
+- https://n8n.io/integrations/medibank/
+- https://composio.dev/toolkits/medibank
+- https://monid.ai/tools/medibank
+checked:
+- https://composio.dev/toolkits/medibank
+- https://monid.ai/tools/medibank
+- https://n8n.io/integrations/medibank/
+- https://zapier.com/apps/medibank/integrations
+- https://www.workato.com/integrations/medibank
+- https://www.make.com/en/integrations/medibank
+- https://www.medibank.com.au/integrations/
+- https://www.medibank.com.au/partners/
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
+note: No integration edges found. Zapier, n8n and Workato listings return 404; make.com answered 403 with a Cloudflare
+  challenge, so it is unread rather than absent. www.medibank.com.au/integrations and /partners return 404 (apis.yml),
+  and there is no contract in openapi/ to read. ECLIPSE (Services Australia), HICAPS and the Hospital Casemix Protocol
+  are industry claiming rails, not published integration listings, so they are not recorded as edges.

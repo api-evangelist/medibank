@@ -1,0 +1,36 @@
+name: Medibank MCP Server
+type: MCPServer
+generated: '2026-10-20'
+method: none
+status: none
+note: >-
+  Checked and nothing there. Medibank publishes no MCP server, hosted or local,
+  and no public API, so there are no OpenAPI operations to derive a candidate
+  tool list from. A web search for a Medibank MCP server on 2026-10-20 returned
+  nothing that names Medibank. https://www.medibank.com.au/.well-known/mcp.json and
+  /.well-known/mcp/server-card.json redirect (301) to retail-live.aem.ha-medibank.com
+  and return an HTML page, not JSON. mcp.medibank.com.au did not resolve or connect.
+  Pre-flight graded https://www.medibank.com.au/mcp and https://members.medibank.com.au/mcp
+  as opaque: both return 403, and so does a control path, so the edge refuses
+  before it routes and the result proves nothing either way.
+probes:
+- url: https://www.medibank.com.au/.well-known/mcp.json
+  status: 301
+  result: redirects to an HTML page on retail-live.aem.ha-medibank.com
+- url: https://www.medibank.com.au/.well-known/mcp/server-card.json
+  status: 301
+  result: redirects to an HTML page on retail-live.aem.ha-medibank.com
+- url: https://mcp.medibank.com.au/mcp
+  status: 0
+  result: no connection
+- url: https://www.medibank.com.au/mcp
+  status: 403
+  result: opaque (control path also 403)
+- url: https://members.medibank.com.au/mcp
+  status: 403
+  result: opaque (control path also 403)
+tools: []
+deployment:
+  mode: none
+  auth: unknown
+  verified: probed

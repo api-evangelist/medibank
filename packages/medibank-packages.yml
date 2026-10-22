@@ -1,0 +1,43 @@
+generated: '2026-10-20'
+method: searched
+source: https://registry.npmjs.org/-/v1/search?text=medibank
+name: Medibank packages
+note: >-
+  Medibank publishes no public API and therefore no API client SDK. Registry
+  searches for "medibank" on PyPI (404), RubyGems ([]), crates.io (0), NuGet (0)
+  and Maven Central found nothing. The only first-party packages are three npm
+  front-end libraries under the @medibank-digital scope, whose npm maintainers
+  all use medibank.com.au email addresses; two are vendored forks of
+  third-party libraries (tippy.js, style-vendorizer). None wraps an API.
+  validate-provider-number (npm) was excluded: its repository is
+  github.com/medipass/validate-provider-number, which is not Medibank. The
+  GitHub org github.com/Medibank (blog www.medibank.com.au) holds only coding
+  challenges and an AEM/Puppet orchestrator, with no SDK.
+packages:
+- name: '@medibank-digital/mono-components'
+  registry: npm
+  url: https://www.npmjs.com/package/@medibank-digital/mono-components
+  language: JavaScript
+  official: true
+  kind: ui-component-library
+  version: 1.6.6
+  published: '2022-05-16'
+  note: Front-end component library, not an API client; 19 versions published, no description.
+- name: '@medibank-digital/tippy.js'
+  registry: npm
+  url: https://www.npmjs.com/package/@medibank-digital/tippy.js
+  language: JavaScript
+  official: true
+  kind: vendored-fork
+  version: 6.3.2
+  published: '2021-05-05'
+  note: Republished fork of atomiks/tippyjs (repository field points upstream); not an API client.
+- name: '@medibank-digital/style-vendorizer'
+  registry: npm
+  url: https://www.npmjs.com/package/@medibank-digital/style-vendorizer
+  language: JavaScript
+  official: true
+  kind: vendored-fork
+  version: 2.0.1
+  published: '2021-05-05'
+  note: Republished fork of kripod/style-vendorizer; not an API client.

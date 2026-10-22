@@ -1,0 +1,10 @@
+generated: '2026-10-20'
+method: none
+name: Medibank rate limits
+limit_count: 0
+note: >-
+  No rate limits are documented because Medibank exposes no public API; the
+  provider self-service portal (providers.medibank.com.au) is a login-walled
+  SPA and api.medibank.com.au refuses public connections. No RateLimit or
+  Retry-After headers were observable unauthenticated.
+limits: []

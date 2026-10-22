@@ -1,7 +1,11 @@
 aid: medibank
+
 url: https://raw.githubusercontent.com/api-evangelist/medibank/refs/heads/main/apis.yml
+
 name: Medibank
+
 kind: company
+
 description: >-
   Medibank Private Limited (ASX: MPL) is Australia's largest private health
   insurer, headquartered in Melbourne and operating two retail brands, Medibank
@@ -42,6 +46,7 @@ description: >-
   authentication scheme could be confirmed anywhere on Medibank's public web
   estate as of 2026-07-25, and none of the four insurance API verbs — quote,
   bind, issue or FNOL — is exposed to unauthenticated developers.
+
 deliveryModel:
   model: saas
   open_source: false
@@ -53,6 +58,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: unknown
@@ -68,7 +74,9 @@ accessModel:
   - security
   generated: '2026-09-02'
   method: derived
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+
+image: https://www.medibank.com.au/content/dam/medibank/custom-campaigns/Digital/medibank_logo_red.jpg
+
 tags:
 - Insurance
 - Australia
@@ -80,11 +88,28 @@ tags:
 - Policy Administration
 - Travel Insurance
 - Pet Insurance
+
 created: '2026-07-25'
-modified: '2026-10-06'
+
+modified: '2026-10-20'
+
 specificationVersion: '0.23'
-apis: []
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
 common:
+- type: Hosts
+  url: hosts/medibank-hosts.yml
+- type: Vendors
+  url: vendors/medibank-vendors.yml
+- type: SDKs
+  url: packages/medibank-packages.yml
+- type: Packages
+  url: packages/medibank-packages.yml
+- type: GettingStarted
+  url: https://www.medibank.com.au/health-support/pregnancy/article/getting-started-breastfeeding/
 - url: https://www.medibank.com.au/livebetter/newsroom/rss
   type: BlogRSS
 - type: DomainSecurity
@@ -128,12 +153,35 @@ common:
   url: https://www.medibank.com.au/privacy/
 - type: TermsOfService
   url: https://www.medibank.com.au/legal-information/
+- type: TermsOfService
+  name: Terms and conditions
+  url: https://www.medibank.com.au/terms-and-conditions/
 - type: SecurityPolicy
   url: https://www.medibank.com.au/help/security-and-privacy/
 - type: InvestorRelations
   url: https://www.medibank.com.au/about/investor-centre/
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+
+apis: []
+
 x-tags-removed:
 - Partner Gated
+
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: Website www.medibank.com.au verified 200 (title "Medibank Private Health Insurance | Medibank"); all common pointers re-fetched 200 on 2026-10-20; providers.medibank.com.au is a catch-all SPA titled "Medibank - Provider Self Service" and kept as a real portal.
+  evidence:
+  - url: https://www.medibank.com.au/
+    status: 200
+  - url: https://providers.medibank.com.au/
+    status: 200
+  - url: https://www.medibank.com.au/terms-and-conditions/
+    status: 200
+  - url: https://www.medibank.com.au/content/dam/medibank/custom-campaigns/Digital/medibank_logo_red.jpg
+    status: 200
+x-enrichment:
+  date: '2026-10-20'
+  status: enriched
+  artifacts_added: 17
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=anthropic,regulatory=anthropic

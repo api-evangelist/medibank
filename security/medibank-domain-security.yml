@@ -1,4 +1,4 @@
-generated: '2026-07-25'
+generated: '2026-10-20'
 method: probed
 source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
 hosts:
@@ -18,12 +18,12 @@ domains:
 - domain: medibank.com.au
   dnssec: false
   caa:
-  - 0 issuewild "pki.goog;"
   - 0 iodef "mailto:mpl_secops_alerts@medibank.com.au"
   - 0 issue "digicert.com"
   - 0 issue "entrust.net"
   - 0 issue "pki.goog;"
   - 0 issuewild "digicert.com"
+  - 0 issuewild "pki.goog;"
   spf: true
   dmarc: true
   dmarc_policy: reject
